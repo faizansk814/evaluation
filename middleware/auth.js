@@ -1,0 +1,20 @@
+const jwt=require('jsonwebtoken')
+
+const auth=(req,res,next)=>{
+    const token=req.headers.authorization.split(" ")[1]
+    if(token){
+        jwt.verify(token, 'marvel', function(err, decoded) {
+            if(decoded){
+                console.log(decoded)
+                req.body.userID=decoded.userID
+                console.log(req.body)
+                next()
+            }else{
+                res.status(401).send({"msg":"wrong credintials"})
+            }
+          });
+    }else{
+        res.status(401).send({"msg":"Login first"})
+    }
+}
+module.exports=auth
